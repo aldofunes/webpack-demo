@@ -3,9 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const validate = require('webpack-validator');
 require('dotenv').config();
+const stylelint = require('stylelint');
 const pkg = require('./package.json');
 
 const parts = require('./libs/parts');
+
+process.env.BABEL_ENV = process.env.npm_lifecycle_event;
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -26,14 +29,37 @@ const common = {
   output: {
     path: PATHS.build,
     // Tweak this to match your GitHub project name
-    publicPath: '/webpack-demo/',
+    publicPath: '/',
     filename: '[name].js'
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Webpack demo'
-    })
-  ]
+    }),
+  ],
+  module: {
+    preLoaders: [
+      {
+        test: /\.css?$/,
+        loaders: ['postcss'],
+        include: PATHS.app
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ['eslint'],
+        include: PATHS.app
+      }
+    ]
+  },
+  postcss: function () {
+    return [
+      stylelint({
+        rules: {
+          'color-hex-case': 'lower'
+        }
+      })
+    ];
+  }
 };
 
 var config;
@@ -51,8 +77,15 @@ switch (process.env.npm_lifecycle_event) {
           filename: '[name].[chunkhash].js',
           // This is used for require.ensure. The setup will work without this, but is useful to set
           chunkFilename: '[chunkhash].js'
+        },
+        resolve: {
+          alias: {
+            'react': 'react-lite',
+            'react-dom': 'react-lite'
+          }
         }
       },
+      parts.react(PATHS.app),
       parts.clean(PATHS.build),
       parts.setFreeVariable('process.env.NODE_ENV', 'production'),
       parts.extractBundle({
@@ -70,6 +103,7 @@ switch (process.env.npm_lifecycle_event) {
       {
         devtool: 'eval-source-map'
       },
+      parts.react(PATHS.app),
       parts.setupCSS(PATHS.style),
       parts.devServer({
         // Customize host/port here if needed
