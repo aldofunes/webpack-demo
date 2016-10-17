@@ -1,7 +1,3 @@
 body {
   background-color: cornsilk;
 }
-
-:local(.redButton) {
-  background-color: red;
-}

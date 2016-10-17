@@ -726,4 +726,8 @@ td,th {
 .pure-table-horizontal tbody>tr:last-child>td {
   border-bottom-width: 0;
 }
-/*# sourceMappingURL=style.29341b930cbfe9d829a1.css.map*/
+
+body {
+  background-color: #fff8dc;
+}
+/*# sourceMappingURL=style.a4679decd3247c10a3b6.css.map*/
