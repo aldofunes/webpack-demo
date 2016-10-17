@@ -6,4 +6,8 @@ if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf');
 }
 
-ReactDOM.render(<App />, document.body);
+var element = document.createElement('div');
+element.id = 'app-root';
+document.body.appendChild(element);
+
+ReactDOM.render(<App />, document.getElementById('app-root'));
