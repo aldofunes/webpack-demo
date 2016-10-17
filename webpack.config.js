@@ -28,8 +28,6 @@ const common = {
   },
   output: {
     path: PATHS.build,
-    // Tweak this to match your GitHub project name
-    publicPath: '/',
     filename: '[name].js'
   },
   plugins: [
@@ -76,7 +74,9 @@ switch (process.env.npm_lifecycle_event) {
           path: PATHS.build,
           filename: '[name].[chunkhash].js',
           // This is used for require.ensure. The setup will work without this, but is useful to set
-          chunkFilename: '[chunkhash].js'
+          chunkFilename: '[chunkhash].js',
+          // Tweak this to match your GitHub project name
+          publicPath: '/webpack-demo/',
         },
         resolve: {
           alias: {
